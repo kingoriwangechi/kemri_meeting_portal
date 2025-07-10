@@ -1,0 +1,36 @@
+[
+  {
+    "id": "96c37d65-5cb1-4854-ae09-62853d6b029b",
+    "title": "cvr",
+    "description": "w4dyhujkjhgfds",
+    "dateTime": "2025-07-10T10:33",
+    "type": "internal",
+    "platform": "zoom",
+    "attendees": [
+      "florencekingori002gmail.com"
+    ],
+    "meetingLink": "https://us05web.zoom.us/j/88218231252?pwd=8oeRafjMwF3n16buaQd30aaWZt5k82.1",
+    "zoomMeetingId": 88218231252,
+    "zoomInvitation": "Florence King'ori is inviting you to a scheduled Zoom meeting.\r\n\r\nTopic: cvr\r\nTime: Jul 10, 2025 10:33 AM Nairobi\r\nJoin Zoom Meeting\r\nhttps://us05web.zoom.us/j/88218231252?pwd=8oeRafjMwF3n16buaQd30aaWZt5k82.1\r\n\r\nMeeting ID: 882 1823 1252\r\nPasscode: 01J7vk\r\n\r\n",
+    "organizer": "florencekingori00@gmail.com",
+    "createdAt": "2025-07-10T07:33:45.312Z",
+    "status": "scheduled"
+  },
+  {
+    "id": "99dbd453-070d-4f41-bef9-73d5fa6be889",
+    "title": "meeting 1",
+    "description": "hdfnv",
+    "dateTime": "2025-07-11T10:36",
+    "type": "internal",
+    "platform": "zoom",
+    "attendees": [
+      "lorencekingori00@gmail.com"
+    ],
+    "meetingLink": "https://us05web.zoom.us/j/88026389938?pwd=2KQPBfrXBzZw3OQb0qv4VtLN77UqPv.1",
+    "zoomMeetingId": 88026389938,
+    "zoomInvitation": "Florence King'ori is inviting you to a scheduled Zoom meeting.\r\n\r\nTopic: meeting 1\r\nTime: Jul 10, 2025 10:36 AM Nairobi\r\nJoin Zoom Meeting\r\nhttps://us05web.zoom.us/j/88026389938?pwd=2KQPBfrXBzZw3OQb0qv4VtLN77UqPv.1\r\n\r\nMeeting ID: 880 2638 9938\r\nPasscode: YZKtu7\r\n\r\n",
+    "organizer": "florencekingori00@gmail.com",
+    "createdAt": "2025-07-10T07:36:57.629Z",
+    "status": "scheduled"
+  }
+]

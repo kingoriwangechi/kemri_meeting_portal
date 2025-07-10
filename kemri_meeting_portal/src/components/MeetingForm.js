@@ -50,11 +50,13 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 			});
 
 			if (!response.ok) {
-				throw new Error("Failed to create meeting");
+				const error = await response.json();
+				throw new Error(error.error || "Failed to create meeting");
 			}
 
 			const newMeeting = await response.json();
 			onMeetingCreated(newMeeting);
+			onClose();
 		} catch (error) {
 			setError(error.message);
 		} finally {
@@ -63,11 +65,16 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 	};
 
 	const handleChange = (e) => {
-		setFormData({
-			...formData,
-			[e.target.name]: e.target.value,
-		});
+		const { name, value } = e.target;
+		setFormData((prev) => ({
+			...prev,
+			[name]: value,
+			// Clear meeting link when switching to Zoom
+			...(name === "platform" && value === "zoom" ? { meetingLink: "" } : {}),
+		}));
 	};
+
+	const isZoomPlatform = formData.platform === "zoom";
 
 	return (
 		<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -209,6 +216,11 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							className="block text-sm font-medium text-gray-700"
 						>
 							Meeting Link
+							{isZoomPlatform && (
+								<span className="text-sm text-gray-500 ml-1">
+									(Will be generated automatically)
+								</span>
+							)}
 						</label>
 						<input
 							type="url"
@@ -216,8 +228,13 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							name="meetingLink"
 							value={formData.meetingLink}
 							onChange={handleChange}
-							placeholder="https://zoom.us/j/... or https://teams.microsoft.com/..."
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+							placeholder={
+								isZoomPlatform
+									? "Will be generated automatically"
+									: "https://teams.microsoft.com/..."
+							}
+							disabled={isZoomPlatform}
+							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm disabled:bg-gray-100 disabled:text-gray-500"
 						/>
 					</div>
 

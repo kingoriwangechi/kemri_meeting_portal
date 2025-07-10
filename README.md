@@ -1,1 +1,0 @@
-# kemri_meeting_portal

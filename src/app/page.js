@@ -57,9 +57,6 @@ export default function Home() {
 							Sign In to Continue
 						</Link>
 
-						<p className="text-sm text-gray-500">
-							Access restricted to @kemri.go.ke email addresses
-						</p>
 					</div>
 				</div>
 

@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { getMeetings, addMeeting, deleteMeeting } from "../../../lib/storage";
-import { sendMeetingInvitation } from "../../../lib/email";
-import { createZoomMeeting, deleteZoomMeeting } from "../../../lib/zoom";
+import { getMeetings, addMeeting, deleteMeeting } from "@/lib/storage";
+import { sendMeetingInvitation } from "@/lib/email";
+import { createZoomMeeting, deleteZoomMeeting } from "@/lib/zoom";
 import { v4 as uuidv4 } from "uuid";
 
 export async function GET() {
@@ -33,6 +33,7 @@ export async function POST(request) {
 			platform,
 			attendees,
 			meetingLink,
+			isRestrictive,
 		} = body;
 
 		// Create Zoom meeting if platform is zoom and no meeting link provided
@@ -68,6 +69,7 @@ export async function POST(request) {
 			type,
 			platform,
 			attendees: attendees || [],
+			isRestrictive: isRestrictive || false,
 			meetingLink: finalMeetingLink,
 			zoomMeetingId,
 			zoomInvitation,
@@ -93,8 +95,8 @@ export async function POST(request) {
 			);
 		}
 
-		// Send email invitations if attendees are provided
-		if (attendees && attendees.length > 0) {
+		// Send email invitations only if meeting is restrictive and attendees are provided
+		if (isRestrictive && attendees && attendees.length > 0) {
 			const emailContent =
 				platform === "zoom" && zoomInvitation
 					? zoomInvitation // Use Zoom's formatted invitation

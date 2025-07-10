@@ -24,6 +24,7 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 		attendees: "",
 		meetingLink: "",
 	});
+	const [isRestrictive, setIsRestrictive] = useState(false);
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
@@ -33,10 +34,12 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 		setError("");
 
 		try {
-			const attendeesArray = formData.attendees
-				.split(",")
-				.map((email) => email.trim())
-				.filter((email) => email);
+			const attendeesArray = isRestrictive
+				? formData.attendees
+						.split(",")
+						.map((email) => email.trim())
+						.filter((email) => email)
+				: [];
 
 			const response = await fetch("/api/meetings", {
 				method: "POST",
@@ -46,6 +49,7 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 				body: JSON.stringify({
 					...formData,
 					attendees: attendeesArray,
+					isRestrictive,
 				}),
 			});
 
@@ -125,7 +129,7 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							required
 							value={formData.title}
 							onChange={handleChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
 						/>
 					</div>
 
@@ -142,7 +146,7 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							rows={3}
 							value={formData.description}
 							onChange={handleChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
 						/>
 					</div>
 
@@ -154,13 +158,14 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							Date & Time *
 						</label>
 						<input
-							type="datetime-local"
+							type="text"
 							id="dateTime"
 							name="dateTime"
 							required
 							value={formData.dateTime}
 							onChange={handleChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+							placeholder="YYYY-MM-DD HH:MM (e.g., 2025-07-15 14:30)"
+							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
 						/>
 					</div>
 
@@ -177,7 +182,7 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							required
 							value={formData.type}
 							onChange={handleChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
 						>
 							{MEETING_TYPES.map((type) => (
 								<option key={type.value} value={type.value}>
@@ -200,7 +205,7 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							required
 							value={formData.platform}
 							onChange={handleChange}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
 						>
 							{PLATFORMS.map((platform) => (
 								<option key={platform.value} value={platform.value}>
@@ -234,27 +239,45 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 									: "https://teams.microsoft.com/..."
 							}
 							disabled={isZoomPlatform}
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm disabled:bg-gray-100 disabled:text-gray-500"
+							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 text-black"
 						/>
 					</div>
 
-					<div>
-						<label
-							htmlFor="attendees"
-							className="block text-sm font-medium text-gray-700"
-						>
-							Attendees (Email addresses, comma-separated)
-						</label>
-						<textarea
-							id="attendees"
-							name="attendees"
-							rows={3}
-							value={formData.attendees}
-							onChange={handleChange}
-							placeholder="user1@kemri.go.ke, user2@kemri.go.ke"
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+					<div className="flex items-center">
+						<input
+							id="isRestrictive"
+							type="checkbox"
+							checked={isRestrictive}
+							onChange={(e) => setIsRestrictive(e.target.checked)}
+							className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
 						/>
+						<label
+							htmlFor="isRestrictive"
+							className="ml-2 block text-sm text-gray-700"
+						>
+							Restrict access (only invited attendees can join)
+						</label>
 					</div>
+
+					{isRestrictive && (
+						<div>
+							<label
+								htmlFor="attendees"
+								className="block text-sm font-medium text-gray-700"
+							>
+								Attendees (Email addresses, comma-separated)
+							</label>
+							<textarea
+								id="attendees"
+								name="attendees"
+								rows={3}
+								value={formData.attendees}
+								onChange={handleChange}
+								placeholder="user1@kemri.go.ke, user2@kemri.go.ke"
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
+							/>
+						</div>
+					)}
 
 					<div className="flex justify-end space-x-3 pt-4">
 						<button

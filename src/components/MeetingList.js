@@ -197,7 +197,15 @@ export default function MeetingList({ meetings, onMeetingDeleted }) {
 											d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
 										/>
 									</svg>
-									{meeting.attendees?.length || 0} attendees
+									{meeting.isRestrictive ? (
+										<span title="Restricted meeting - only invited attendees can join">
+											🔒 {meeting.attendees?.length || 0} invited attendees
+										</span>
+									) : (
+										<span title="Open meeting - anyone with the link can join">
+											🔓 Open access
+										</span>
+									)}
 								</div>
 							</div>
 

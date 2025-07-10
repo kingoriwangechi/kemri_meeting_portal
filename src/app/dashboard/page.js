@@ -3,8 +3,8 @@
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import MeetingForm from "../../components/MeetingForm";
-import MeetingList from "../../components/MeetingList";
+import MeetingForm from "@/components/MeetingForm";
+import MeetingList from "@/components/MeetingList";
 
 export default function Dashboard() {
 	const { data: session, status } = useSession();

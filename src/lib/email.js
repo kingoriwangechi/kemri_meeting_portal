@@ -1,8 +1,19 @@
 import sgMail from "@sendgrid/mail";
 
-sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+// Only set the API key if it's properly formatted (starts with SG.)
+// This prevents build errors while keeping the code functional
+const apiKey = process.env.SENDGRID_API_KEY || "";
+if (apiKey && apiKey.startsWith("SG.")) {
+  sgMail.setApiKey(apiKey);
+}
 
 export const sendMeetingInvitation = async (meeting, attendees) => {
+	// If API key is not set up properly, return a graceful error
+	if (!process.env.SENDGRID_API_KEY || !process.env.SENDGRID_API_KEY.startsWith("SG.")) {
+		console.warn("SendGrid API key is not properly configured");
+		return { success: false, error: "Email service not configured" };
+	}
+
 	const { title, description, dateTime, platform, meetingLink, organizer } =
 		meeting;
 

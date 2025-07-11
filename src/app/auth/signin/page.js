@@ -4,6 +4,7 @@ import { signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import AuthDebugInfo from "@/components/AuthDebugInfo";
 
 export default function SignIn() {
 	const [isLogin, setIsLogin] = useState(true);
@@ -34,12 +35,43 @@ export default function SignIn() {
 		}
 	};
 
-	const handleGoogleSignIn = () => {
-		signIn("google", { callbackUrl: "/dashboard" });
+	const handleGoogleSignIn = async () => {
+		try {
+			console.log("Starting Google sign in...");
+			setError(""); // Clear any previous errors
+
+			// Use the standard NextAuth.js approach - this was working yesterday
+			signIn("google", {
+				callbackUrl: "/dashboard",
+				// Note: We're letting NextAuth handle the redirect
+			});
+		} catch (error) {
+			console.error("Google sign in error:", error);
+			setError(
+				`Failed to authenticate with Google: ${
+					error.message || "Unknown error"
+				}`
+			);
+		}
 	};
 
-	const handleMicrosoftSignIn = () => {
-		signIn("azure-ad", { callbackUrl: "/dashboard" });
+	const handleMicrosoftSignIn = async () => {
+		try {
+			console.log("Starting Microsoft sign in...");
+			setError(""); // Clear any previous errors
+
+			// Use the standard NextAuth.js approach for consistency
+			signIn("azure-ad", {
+				callbackUrl: "/dashboard",
+			});
+		} catch (error) {
+			console.error("Microsoft sign in error:", error);
+			setError(
+				`Failed to authenticate with Microsoft: ${
+					error.message || "Unknown error"
+				}`
+			);
+		}
 	};
 
 	return (
@@ -68,7 +100,12 @@ export default function SignIn() {
 
 					{error && (
 						<div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-							{error}
+							<p className="font-medium">Authentication Error:</p>
+							<p>{error}</p>
+							<p className="text-xs mt-1">
+								If this error persists, please check your environment variables
+								and OAuth configuration.
+							</p>
 						</div>
 					)}
 
@@ -186,6 +223,9 @@ export default function SignIn() {
 							Microsoft
 						</button>
 					</div>
+
+					{/* Debug information - remove in production */}
+					<AuthDebugInfo />
 				</div>
 			</div>
 		</div>

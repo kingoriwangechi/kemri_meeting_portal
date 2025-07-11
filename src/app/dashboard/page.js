@@ -3,6 +3,8 @@
 import { useSession, signOut } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
 import MeetingForm from "@/components/MeetingForm";
 import MeetingList from "@/components/MeetingList";
 
@@ -67,8 +69,14 @@ export default function Dashboard() {
 				<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 					<div className="flex justify-between items-center py-4">
 						<div className="flex items-center">
-							<div className="h-10 w-10 bg-blue-600 rounded-full flex items-center justify-center">
-								<span className="text-white font-bold text-lg">K</span>
+							<div className="h-10 w-10 flex items-center justify-center">
+								<Image
+									src="/images/logo.png"
+									alt="KEMRI Logo"
+									width={40}
+									height={40}
+									className="rounded-full"
+								/>
 							</div>
 							<h1 className="ml-3 text-xl font-semibold text-gray-900">
 								KEMRI Meeting Portal
@@ -78,6 +86,12 @@ export default function Dashboard() {
 							<span className="text-sm text-gray-700">
 								Welcome, {session.user.name}
 							</span>
+							<Link
+								href="/"
+								className="text-sm text-blue-600 hover:text-blue-800"
+							>
+								Home
+							</Link>
 							<button
 								onClick={() => signOut()}
 								className="text-sm text-gray-500 hover:text-gray-700"

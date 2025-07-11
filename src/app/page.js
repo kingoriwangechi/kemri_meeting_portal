@@ -1,20 +1,11 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home() {
 	const { data: session, status } = useSession();
-	const router = useRouter();
-
-	useEffect(() => {
-		if (status === "loading") return;
-		if (session) {
-			router.push("/dashboard");
-		}
-	}, [session, status, router]);
 
 	if (status === "loading") {
 		return (
@@ -27,16 +18,18 @@ export default function Home() {
 		);
 	}
 
-	if (session) {
-		return null; // Will redirect to dashboard
-	}
-
 	return (
 		<div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
 			<div className="flex flex-col items-center justify-center min-h-screen px-4">
 				<div className="max-w-md w-full text-center">
-					<div className="mx-auto h-20 w-20 bg-blue-600 rounded-full flex items-center justify-center mb-6">
-						<span className="text-white font-bold text-2xl">K</span>
+					<div className="mx-auto h-20 w-20 flex items-center justify-center mb-6">
+						<Image
+							src="/images/logo.png"
+							alt="KEMRI Logo"
+							width={80}
+							height={80}
+							className="rounded-full"
+						/>
 					</div>
 
 					<h1 className="text-4xl font-bold text-gray-900 mb-4">
@@ -50,13 +43,21 @@ export default function Home() {
 					</p>
 
 					<div className="space-y-4">
-						<Link
-							href="/auth/signin"
-							className="block w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
-						>
-							Sign In to Continue
-						</Link>
-
+						{session ? (
+							<Link
+								href="/dashboard"
+								className="block w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+							>
+								Go to Dashboard
+							</Link>
+						) : (
+							<Link
+								href="/auth/signin"
+								className="block w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+							>
+								Sign In to Continue
+							</Link>
+						)}
 					</div>
 				</div>
 

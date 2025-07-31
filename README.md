@@ -5,6 +5,7 @@ The Kenya Medical Research Institute (KEMRI) Meeting Portal is a web-based appli
 ## Features
 
 ### User Authentication & Authorization
+
 - Multiple sign-in options:
   - Google OAuth
   - Credentials (email/password)
@@ -13,6 +14,7 @@ The Kenya Medical Research Institute (KEMRI) Meeting Portal is a web-based appli
 - Secure authentication flow using NextAuth.js
 
 ### Meeting Management
+
 - Creation, editing, and cancellation of meetings
 - Option for open (public) or restricted (invitation-only) meetings
 - Automated meeting link generation for Zoom and Microsoft Teams
@@ -20,11 +22,13 @@ The Kenya Medical Research Institute (KEMRI) Meeting Portal is a web-based appli
 - Integration with Zoom API (Microsoft Teams coming soon)
 
 ### Communication Features
+
 - Automated email notifications for meeting invites via SendGrid
 - Reminder system for upcoming meetings
 - Direct messaging for meeting participants (in progress)
 
 ### Reporting & Analytics (Planned)
+
 - Meeting attendance tracking
 - Usage reports and statistics
 - Meeting history and archives
@@ -98,6 +102,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 ## Project Timeline & Implementation Status
 
 ### Phase 1: Core Development
+
 - [x] Setup development environment
 - [x] Implement basic authentication system (Google, Credentials)
 - [x] Develop basic meeting management functionality
@@ -106,6 +111,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 - [ ] Implement role-based access control
 
 ### Phase 2: Integration & Enhancement
+
 - [x] Basic Zoom API integration
 - [ ] Microsoft Teams integration
 - [ ] Implement comprehensive email notification system
@@ -116,6 +122,7 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 - [ ] User acceptance testing
 
 ### Phase 3: Deployment & Training
+
 - [ ] Production deployment setup
 - [ ] Migration to database storage solution
 - [ ] User training and documentation

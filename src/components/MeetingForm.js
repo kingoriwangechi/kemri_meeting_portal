@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const MEETING_TYPES = [
 	{ value: "internal", label: "Internal Meeting" },
@@ -14,11 +14,16 @@ const PLATFORMS = [
 	{ value: "teams", label: "Microsoft Teams" },
 ];
 
-export default function MeetingForm({ onClose, onMeetingCreated }) {
+export default function MeetingForm({
+	onClose,
+	onMeetingCreated,
+	initialMeeting = null,
+}) {
 	const [formData, setFormData] = useState({
 		title: "",
 		description: "",
-		dateTime: "",
+		date: "",
+		time: "",
 		type: "internal",
 		platform: "zoom",
 		attendees: "",
@@ -28,12 +33,54 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 	const [loading, setLoading] = useState(false);
 	const [error, setError] = useState("");
 
+	// Initialize form with meeting data if provided (for editing)
+	useEffect(() => {
+		if (initialMeeting) {
+			// If we have a dateTime string, split it into date and time
+			let date = "";
+			let time = "";
+
+			if (initialMeeting.dateTime) {
+				const dateObj = new Date(initialMeeting.dateTime);
+				date = dateObj.toISOString().split("T")[0]; // YYYY-MM-DD
+				time = dateObj.toTimeString().substring(0, 5); // HH:MM
+			}
+
+			setFormData({
+				title: initialMeeting.title || "",
+				description: initialMeeting.description || "",
+				date,
+				time,
+				type: initialMeeting.type || "internal",
+				platform: initialMeeting.platform || "zoom",
+				meetingLink: initialMeeting.meetingLink || "",
+			});
+
+			// Set attendees as comma-separated string if available
+			if (initialMeeting.attendees && initialMeeting.attendees.length > 0) {
+				setFormData((prev) => ({
+					...prev,
+					attendees: initialMeeting.attendees.join(", "),
+				}));
+				setIsRestrictive(true);
+			}
+		}
+	}, [initialMeeting]);
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setLoading(true);
 		setError("");
 
 		try {
+			// Validate date and time fields
+			if (!formData.date || !formData.time) {
+				throw new Error("Date and time are required");
+			}
+
+			// Combine date and time into a single dateTime string
+			const dateTime = `${formData.date}T${formData.time}:00`;
+
 			const attendeesArray = isRestrictive
 				? formData.attendees
 						.split(",")
@@ -41,13 +88,23 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 						.filter((email) => email)
 				: [];
 
-			const response = await fetch("/api/meetings", {
-				method: "POST",
+			// Determine if we're creating or updating a meeting
+			const isUpdating = initialMeeting && initialMeeting.id;
+
+			const url = isUpdating
+				? `/api/meetings/${initialMeeting.id}`
+				: "/api/meetings";
+
+			const method = isUpdating ? "PUT" : "POST";
+
+			const response = await fetch(url, {
+				method: method,
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
 					...formData,
+					dateTime, // Add the combined dateTime
 					attendees: attendeesArray,
 					isRestrictive,
 				}),
@@ -85,7 +142,7 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 			<div className="bg-white rounded-lg p-6 w-full max-w-md max-h-[90vh] overflow-y-auto">
 				<div className="flex justify-between items-center mb-4">
 					<h3 className="text-lg font-semibold text-gray-900">
-						Create New Meeting
+						{initialMeeting ? "Update Meeting" : "Create New Meeting"}
 					</h3>
 					<button
 						onClick={onClose}
@@ -150,23 +207,41 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 						/>
 					</div>
 
-					<div>
-						<label
-							htmlFor="dateTime"
-							className="block text-sm font-medium text-gray-700"
-						>
-							Date & Time *
-						</label>
-						<input
-							type="text"
-							id="dateTime"
-							name="dateTime"
-							required
-							value={formData.dateTime}
-							onChange={handleChange}
-							placeholder="YYYY-MM-DD HH:MM (e.g., 2025-07-15 14:30)"
-							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
-						/>
+					<div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+						<div>
+							<label
+								htmlFor="date"
+								className="block text-sm font-medium text-gray-700"
+							>
+								Date *
+							</label>
+							<input
+								type="date"
+								id="date"
+								name="date"
+								required
+								value={formData.date}
+								onChange={handleChange}
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
+							/>
+						</div>
+						<div>
+							<label
+								htmlFor="time"
+								className="block text-sm font-medium text-gray-700"
+							>
+								Time *
+							</label>
+							<input
+								type="time"
+								id="time"
+								name="time"
+								required
+								value={formData.time}
+								onChange={handleChange}
+								className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm text-black"
+							/>
+						</div>
 					</div>
 
 					<div>
@@ -292,7 +367,13 @@ export default function MeetingForm({ onClose, onMeetingCreated }) {
 							disabled={loading}
 							className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50"
 						>
-							{loading ? "Creating..." : "Create Meeting"}
+							{loading
+								? initialMeeting
+									? "Updating..."
+									: "Creating..."
+								: initialMeeting
+								? "Update Meeting"
+								: "Create Meeting"}
 						</button>
 					</div>
 				</form>

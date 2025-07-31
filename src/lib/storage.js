@@ -48,6 +48,14 @@ export const deleteMeeting = (meetingId) => {
 	return saveMeetings(updatedMeetings);
 };
 
+export const updateMeeting = (updatedMeeting) => {
+	const meetings = getMeetings();
+	const updatedMeetings = meetings.map((meeting) =>
+		meeting.id === updatedMeeting.id ? updatedMeeting : meeting
+	);
+	return saveMeetings(updatedMeetings);
+};
+
 export const getMeetingById = (meetingId) => {
 	const meetings = getMeetings();
 	return meetings.find((meeting) => meeting.id === meetingId);

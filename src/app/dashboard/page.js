@@ -47,6 +47,14 @@ export default function Dashboard() {
 		setMeetings(meetings.filter((m) => m.id !== meetingId));
 	};
 
+	const handleMeetingUpdated = (updatedMeeting) => {
+		setMeetings(
+			meetings.map((meeting) =>
+				meeting.id === updatedMeeting.id ? updatedMeeting : meeting
+			)
+		);
+	};
+
 	if (status === "loading" || loading) {
 		return (
 			<div className="min-h-screen flex items-center justify-center">
@@ -127,6 +135,7 @@ export default function Dashboard() {
 				<MeetingList
 					meetings={meetings}
 					onMeetingDeleted={handleMeetingDeleted}
+					onMeetingUpdated={handleMeetingUpdated}
 				/>
 			</main>
 		</div>

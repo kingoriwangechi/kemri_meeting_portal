@@ -1,8 +1,17 @@
 import { NextResponse } from "next/server";
 import { getServerSession } from "next-auth";
-import { getMeetings, addMeeting, deleteMeeting } from "@/lib/storage";
+import {
+	getMeetings,
+	addMeeting,
+	deleteMeeting,
+	updateMeeting,
+} from "@/lib/storage";
 import { sendMeetingInvitation } from "@/lib/email";
-import { createZoomMeeting, deleteZoomMeeting } from "@/lib/zoom";
+import {
+	createZoomMeeting,
+	deleteZoomMeeting,
+	updateZoomMeeting,
+} from "@/lib/zoom";
 import { v4 as uuidv4 } from "uuid";
 
 export async function GET() {

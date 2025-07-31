@@ -2,9 +2,16 @@
 
 import { format } from "date-fns";
 import { useState } from "react";
+import MeetingForm from "./MeetingForm";
 
-export default function MeetingList({ meetings, onMeetingDeleted }) {
+export default function MeetingList({
+	meetings,
+	onMeetingDeleted,
+	onMeetingUpdated,
+}) {
 	const [filter, setFilter] = useState("upcoming");
+	const [showEditForm, setShowEditForm] = useState(false);
+	const [selectedMeeting, setSelectedMeeting] = useState(null);
 
 	const now = new Date();
 	const filteredMeetings = meetings.filter((meeting) => {
@@ -43,6 +50,20 @@ export default function MeetingList({ meetings, onMeetingDeleted }) {
 		}
 	};
 
+	const handleEditMeeting = (meeting) => {
+		setSelectedMeeting(meeting);
+		setShowEditForm(true);
+	};
+
+	const handleMeetingUpdated = (updatedMeeting) => {
+		// Pass the updated meeting to the parent component
+		if (typeof onMeetingUpdated === "function") {
+			onMeetingUpdated(updatedMeeting);
+		}
+		setShowEditForm(false);
+		setSelectedMeeting(null);
+	};
+
 	const getMeetingTypeLabel = (type) => {
 		const types = {
 			internal: "Internal Meeting",
@@ -66,6 +87,18 @@ export default function MeetingList({ meetings, onMeetingDeleted }) {
 
 	return (
 		<div>
+			{/* Edit Meeting Modal */}
+			{showEditForm && selectedMeeting && (
+				<MeetingForm
+					initialMeeting={selectedMeeting}
+					onClose={() => {
+						setShowEditForm(false);
+						setSelectedMeeting(null);
+					}}
+					onMeetingCreated={handleMeetingUpdated}
+				/>
+			)}
+
 			{/* Filter Tabs */}
 			<div className="mb-6">
 				<div className="border-b border-gray-200">
@@ -129,25 +162,46 @@ export default function MeetingList({ meetings, onMeetingDeleted }) {
 										</p>
 									</div>
 								</div>
-								<button
-									onClick={() => handleDelete(meeting.id)}
-									className="text-red-400 hover:text-red-600 p-1"
-									title="Delete meeting"
-								>
-									<svg
-										className="h-5 w-5"
-										fill="none"
-										viewBox="0 0 24 24"
-										stroke="currentColor"
+								<div className="flex space-x-2">
+									<button
+										onClick={() => handleEditMeeting(meeting)}
+										className="text-blue-400 hover:text-blue-600 p-1"
+										title="Edit meeting"
 									>
-										<path
-											strokeLinecap="round"
-											strokeLinejoin="round"
-											strokeWidth={2}
-											d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-										/>
-									</svg>
-								</button>
+										<svg
+											className="h-5 w-5"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+											/>
+										</svg>
+									</button>
+									<button
+										onClick={() => handleDelete(meeting.id)}
+										className="text-red-400 hover:text-red-600 p-1"
+										title="Delete meeting"
+									>
+										<svg
+											className="h-5 w-5"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+											/>
+										</svg>
+									</button>
+								</div>
 							</div>
 
 							<div className="space-y-2 mb-4">
@@ -215,31 +269,41 @@ export default function MeetingList({ meetings, onMeetingDeleted }) {
 								</p>
 							)}
 
-							{meeting.meetingLink && (
-								<div className="flex justify-end">
-									<a
-										href={meeting.meetingLink}
-										target="_blank"
-										rel="noopener noreferrer"
-										className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
-									>
-										Join Meeting
-										<svg
-											className="ml-1 h-4 w-4"
-											fill="none"
-											viewBox="0 0 24 24"
-											stroke="currentColor"
+							{meeting.meetingLink &&
+								new Date(meeting.dateTime) > new Date() && (
+									<div className="flex justify-end">
+										<a
+											href={meeting.meetingLink}
+											target="_blank"
+											rel="noopener noreferrer"
+											className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-blue-600 bg-blue-100 hover:bg-blue-200 focus:outline-none focus:ring-2 focus:ring-blue-500"
 										>
-											<path
-												strokeLinecap="round"
-												strokeLinejoin="round"
-												strokeWidth={2}
-												d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-											/>
-										</svg>
-									</a>
-								</div>
-							)}
+											Join Meeting
+											<svg
+												className="ml-1 h-4 w-4"
+												fill="none"
+												viewBox="0 0 24 24"
+												stroke="currentColor"
+											>
+												<path
+													strokeLinecap="round"
+													strokeLinejoin="round"
+													strokeWidth={2}
+													d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+												/>
+											</svg>
+										</a>
+									</div>
+								)}
+
+							{meeting.meetingLink &&
+								new Date(meeting.dateTime) <= new Date() && (
+									<div className="flex justify-end">
+										<span className="inline-flex items-center px-3 py-1 border border-transparent text-sm font-medium rounded-md text-gray-600 bg-gray-100">
+											Meeting Ended
+										</span>
+									</div>
+								)}
 						</div>
 					))}
 				</div>

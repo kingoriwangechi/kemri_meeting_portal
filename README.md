@@ -1,18 +1,44 @@
 # KEMRI Meeting Portal
 
-This project is a meeting management portal for the Kenya Medical Research Institute (KEMRI), built with Next.js, NextAuth.js, and integrated with Zoom API for meeting management and SendGrid for email notifications.
+The Kenya Medical Research Institute (KEMRI) Meeting Portal is a web-based application designed to streamline the scheduling, management, and coordination of meetings for KEMRI staff and external collaborators. This centralized platform enhances communication, reduces administrative overhead, and provides seamless integration with popular video conferencing platforms.
 
 ## Features
 
-- User authentication via:
+### User Authentication & Authorization
+- Multiple sign-in options:
   - Google OAuth
   - Credentials (email/password)
   - Microsoft OAuth (in progress)
-- Meeting management:
-  - Create, view, and delete meetings
-  - Integration with Zoom API
-  - Email notifications for meeting invites
+- Role-based access control
+- Secure authentication flow using NextAuth.js
+
+### Meeting Management
+- Creation, editing, and cancellation of meetings
+- Option for open (public) or restricted (invitation-only) meetings
+- Automated meeting link generation for Zoom and Microsoft Teams
+- Calendar integration and scheduling tools
+- Integration with Zoom API (Microsoft Teams coming soon)
+
+### Communication Features
+- Automated email notifications for meeting invites via SendGrid
+- Reminder system for upcoming meetings
+- Direct messaging for meeting participants (in progress)
+
+### Reporting & Analytics (Planned)
+- Meeting attendance tracking
+- Usage reports and statistics
+- Meeting history and archives
 - Responsive UI with KEMRI branding
+
+## Technology Stack
+
+- **Frontend**: Next.js with React, Tailwind CSS for responsive UI
+- **Backend**: Next.js API routes with server-side processing
+- **Authentication**: NextAuth.js with multiple provider support
+- **Storage**: JSON file storage (development), scalable to database solutions
+- **Email Notifications**: SendGrid email API
+- **Video Conferencing**: Integration with Zoom and Microsoft Teams APIs
+- **Deployment**: Vercel (proposed)
 
 ## Getting Started
 
@@ -23,7 +49,7 @@ This project is a meeting management portal for the Kenya Medical Research Insti
 - Zoom API key and secret
 - SendGrid API key
 - Google OAuth credentials
-- Microsoft OAuth credentials (for future implementation)
+- Microsoft OAuth credentials (for Microsoft authentication)
 
 ### Environment Variables
 
@@ -69,25 +95,47 @@ npm run dev
 
 Visit [http://localhost:3000](http://localhost:3000) to see the application.
 
-## TODO List
+## Project Timeline & Implementation Status
 
-- [ ] **Microsoft Authentication Integration**:
+### Phase 1: Core Development
+- [x] Setup development environment
+- [x] Implement basic authentication system (Google, Credentials)
+- [x] Develop basic meeting management functionality
+- [x] Create responsive UI design with KEMRI branding
+- [ ] Complete Microsoft OAuth integration
+- [ ] Implement role-based access control
 
-  - Complete the Microsoft OAuth implementation
-  - Test authentication flow
-  - Add proper error handling for Microsoft auth
-  - Update the UI to show Microsoft authentication status
+### Phase 2: Integration & Enhancement
+- [x] Basic Zoom API integration
+- [ ] Microsoft Teams integration
+- [ ] Implement comprehensive email notification system
+- [ ] Add recurring meeting support
+- [ ] Implement meeting edit functionality
+- [ ] Develop reporting and analytics features
+- [ ] Add direct messaging for meeting participants
+- [ ] User acceptance testing
 
-- [ ] Enhanced meeting features:
+### Phase 3: Deployment & Training
+- [ ] Production deployment setup
+- [ ] Migration to database storage solution
+- [ ] User training and documentation
+- [ ] System monitoring and optimization
+- [ ] Security audits and enhancements
 
-  - Add recurring meeting support
-  - Implement meeting edit functionality
-  - Add Teams integration alongside Zoom
+## Target Audience
 
-- [ ] Production deployment:
-  - Set up proper database for storing user data
-  - Configure proper email templates
-  - Implement proper security measures
+- KEMRI administrators and managers
+- Research staff and scientists
+- External collaborators and partners
+- Administrative assistants and coordinators
+
+## Success Criteria
+
+- 90% reduction in manual meeting scheduling time
+- Elimination of scheduling conflicts and double-bookings
+- 100% uptime for critical meeting management functions
+- Positive user feedback (>85% satisfaction rate)
+- Successful integration with existing workflows
 
 ## License
 

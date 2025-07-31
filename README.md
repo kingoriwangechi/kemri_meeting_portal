@@ -144,6 +144,36 @@ Visit [http://localhost:3000](http://localhost:3000) to see the application.
 - Positive user feedback (>85% satisfaction rate)
 - Successful integration with existing workflows
 
+## Deployment
+
+This application is configured for deployment on Vercel. For detailed deployment instructions, see the [deployment checklist](./docs/deployment_checklist.md).
+
+### Quick Deployment
+
+1. Install Vercel CLI:
+```bash
+npm install -g vercel
+```
+
+2. Login to Vercel:
+```bash
+vercel login
+```
+
+3. Deploy the application:
+```bash
+vercel
+```
+
+4. For production deployment:
+```bash
+vercel --prod
+```
+
+### Environment Variables
+
+Make sure to set up all required environment variables on your deployment platform. See `.env.production.example` for a list of required variables.
+
 ## License
 
 [MIT](LICENSE)

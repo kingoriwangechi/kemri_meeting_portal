@@ -1,20 +1,20 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/next"
-    }
-  ],
-  "env": {
-    "NEXTAUTH_URL": "${NEXTAUTH_URL}",
-    "NEXTAUTH_SECRET": "${NEXTAUTH_SECRET}"
-  },
-  "regions": ["iad1"],
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/"
-    }
-  ]
+	"version": 2,
+	"builds": [
+		{
+			"src": "package.json",
+			"use": "@vercel/next"
+		}
+	],
+	"env": {
+		"NEXTAUTH_URL": "${NEXTAUTH_URL}",
+		"NEXTAUTH_SECRET": "${NEXTAUTH_SECRET}"
+	},
+	"regions": ["iad1"],
+	"rewrites": [
+		{
+			"source": "/(.*)",
+			"destination": "/"
+		}
+	]
 }

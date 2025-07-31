@@ -151,21 +151,25 @@ This application is configured for deployment on Vercel. For detailed deployment
 ### Quick Deployment
 
 1. Install Vercel CLI:
+
 ```bash
 npm install -g vercel
 ```
 
 2. Login to Vercel:
+
 ```bash
 vercel login
 ```
 
 3. Deploy the application:
+
 ```bash
 vercel
 ```
 
 4. For production deployment:
+
 ```bash
 vercel --prod
 ```

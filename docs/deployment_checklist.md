@@ -13,21 +13,25 @@
 ### Option 1: Vercel Deployment (Recommended)
 
 1. Install Vercel CLI (if not already installed)
+
    ```
    npm install -g vercel
    ```
 
 2. Log in to Vercel
+
    ```
    vercel login
    ```
 
 3. Deploy the application
+
    ```
    vercel
    ```
 
 4. Set up environment variables in Vercel dashboard
+
    - Navigate to your project settings
    - Add all required environment variables from your `.env.local` file
    - Ensure you update NEXTAUTH_URL to your production domain
@@ -40,6 +44,7 @@
 ### Option 2: Manual Deployment
 
 1. Build the application
+
    ```
    npm run build
    ```
@@ -47,6 +52,7 @@
 2. Set up a server with Node.js (18.x or higher)
 
 3. Transfer the following files to the server:
+
    - `.next/` directory
    - `public/` directory
    - `package.json` and `package-lock.json`
@@ -54,6 +60,7 @@
    - `vercel.json`
 
 4. Install production dependencies
+
    ```
    npm install --production
    ```
@@ -61,6 +68,7 @@
 5. Set up environment variables on the server
 
 6. Start the application
+
    ```
    npm start
    ```

@@ -4,105 +4,126 @@ This guide explains how to deploy the KEMRI Meeting Portal application to Vercel
 
 ## Prerequisites
 
-1. A Vercel account (sign up at https://vercel.com)
-2. Git repository with your project (GitHub, GitLab, or Bitbucket)
+1. A [Vercel account](https://vercel.com/signup) (you can sign up with GitHub)
+2. Your project pushed to a Git repository (GitHub, GitLab, or Bitbucket)
+3. Required environment variables ready (see [Environment Variables Documentation](./environment_variables.md))
 
 ## Deployment Steps
 
-### Option 1: Deploy using Vercel Dashboard
+### 1. Connect Your Repository to Vercel
 
-1. Log in to your Vercel account
-2. Click "Add New..." and select "Project"
-3. Import the Git repository containing your KEMRI Meeting Portal project
-4. Configure the project:
-   - Framework Preset: Next.js
-   - Root Directory: ./
-   - Build Command: npm run build
-   - Output Directory: .next
-5. Add Environment Variables:
-   ```
-   NEXTAUTH_URL=https://your-vercel-domain.vercel.app
-   NEXTAUTH_SECRET=your-nextauth-secret
-   GOOGLE_ID=your-production-google-client-id
-   GOOGLE_SECRET=your-production-google-client-secret
-   AZURE_AD_CLIENT_ID=your-production-microsoft-client-id
-   AZURE_AD_CLIENT_SECRET=your-production-microsoft-client-secret
-   AZURE_AD_TENANT_ID=your-production-microsoft-tenant-id
-   ZOOM_API_KEY=your-production-zoom-api-key
-   ZOOM_API_SECRET=your-production-zoom-api-secret
-   ZOOM_HOST_EMAIL=your-production-zoom-account-email
-   SENDGRID_API_KEY=your-production-sendgrid-api-key
-   EMAIL_FROM=your-production-sender-email
-   ```
-6. Click "Deploy"
+1. Log in to your [Vercel Dashboard](https://vercel.com/dashboard)
+2. Click "Add New" > "Project"
+3. Import your Git repository from GitHub, GitLab, or Bitbucket
+4. Select the repository containing the KEMRI Meeting Portal
 
-### Option 2: Deploy using Vercel CLI
+### 2. Configure Project Settings
+
+1. **Framework Preset**: Select "Next.js"
+2. **Root Directory**: Keep as default if your project is at the repository root
+3. **Build Command**: Use default (`next build`)
+4. **Install Command**: Use default (`npm install` or `yarn install`)
+5. **Output Directory**: Keep as default
+6. **Node.js Version**: Set to Node.js 18.x or higher (the default is usually fine)
+
+### 3. Environment Variables
+
+Add the following environment variables to your Vercel project:
+
+| Variable Name     | Description                                                                 |
+| ----------------- | --------------------------------------------------------------------------- |
+| `NEXTAUTH_URL`    | Set to your Vercel deployment URL (e.g., `https://your-project.vercel.app`) |
+| `NEXTAUTH_SECRET` | A strong random string for JWT encryption (at least 32 characters)          |
+
+Add any other optional variables as needed for your specific deployment (see [Environment Variables Documentation](./environment_variables.md))
+
+### 4. Deploy
+
+1. Click "Deploy"
+2. Wait for the build process to complete
+
+### Alternative: Deploy using Vercel CLI
+
+If you prefer using the command line:
 
 1. Install Vercel CLI:
+
    ```bash
    npm install -g vercel
    ```
 
 2. Login to Vercel:
+
    ```bash
    vercel login
    ```
 
-3. Deploy to preview environment:
+3. Deploy from your project directory:
+
    ```bash
    vercel
    ```
 
-4. Add Environment Variables:
-   ```bash
-   vercel env add NEXTAUTH_URL
-   vercel env add NEXTAUTH_SECRET
-   vercel env add GOOGLE_ID
-   vercel env add GOOGLE_SECRET
-   vercel env add AZURE_AD_CLIENT_ID
-   vercel env add AZURE_AD_CLIENT_SECRET
-   vercel env add AZURE_AD_TENANT_ID
-   vercel env add ZOOM_API_KEY
-   vercel env add ZOOM_API_SECRET
-   vercel env add ZOOM_HOST_EMAIL
-   vercel env add SENDGRID_API_KEY
-   vercel env add EMAIL_FROM
-   ```
+4. Follow the interactive prompts to configure your project
 
-5. Deploy to production:
+5. To deploy to production:
    ```bash
    vercel --prod
    ```
 
-## Post-Deployment
+### 5. Verify Deployment
 
-After deployment, make sure to:
+1. Once deployment is complete, click on the generated URL to view your application
+2. Test all major functionality:
+   - User authentication
+   - Meeting creation and management
+   - Email notifications (if configured)
+   - Integration with video conferencing platforms
 
-1. Update the `NEXTAUTH_URL` environment variable to match your deployment URL
-2. Test authentication flows
-3. Test the Zoom meeting creation
-4. Test email notifications
-5. Monitor your application using Vercel Analytics
+### 6. Custom Domain (Optional)
 
-## Database Migration
+To use a custom domain:
 
-The current implementation uses JSON file storage. For production, consider migrating to a database solution:
-
-1. Create a MongoDB Atlas account or other database service
-2. Update the connection strings in your environment variables
-3. Update the storage implementation in your application
+1. Go to your project in the Vercel dashboard
+2. Click on "Settings" > "Domains"
+3. Add your custom domain and follow the provided instructions to configure DNS records
 
 ## Troubleshooting
 
-If you encounter deployment issues:
+If you encounter issues during deployment:
 
-1. Check Vercel build logs for errors
-2. Verify all environment variables are correctly set
-3. Ensure your repository is using the correct Next.js version
-4. Check that all dependencies are properly installed
+1. **Build Failures**:
+
+   - Check the build logs in the Vercel dashboard
+   - Ensure all dependencies are correctly specified in `package.json`
+   - Verify that your Next.js configuration is correct
+
+2. **Runtime Errors**:
+
+   - Check if all required environment variables are set correctly
+   - Look for errors in the Function Logs in the Vercel dashboard
+
+3. **Authentication Issues**:
+
+   - Ensure `NEXTAUTH_URL` is set to your production URL
+   - Verify that OAuth redirect URIs are configured correctly in Google/Microsoft developer consoles
+
+4. **Database Connectivity**:
+   - Verify your MongoDB connection string is correct (if using MongoDB)
+   - Check network access settings in your database service
+
+## Continuous Integration/Deployment
+
+Vercel automatically sets up continuous deployment from your Git repository. Any push to the main/master branch will trigger a new deployment.
+
+If you want to set up preview deployments for pull requests:
+
+1. Go to your project settings in Vercel
+2. Under "Git" section, enable "Preview Deployments" for pull requests
 
 ## Additional Resources
 
 - [Vercel Documentation](https://vercel.com/docs)
 - [Next.js Deployment Documentation](https://nextjs.org/docs/deployment)
-- [MongoDB Atlas Documentation](https://docs.atlas.mongodb.com/)
+- [MongoDB Atlas Documentation](https://docs.atlas.mongodb.com/) (if using MongoDB)
+- [NextAuth.js Documentation](https://next-auth.js.org/)

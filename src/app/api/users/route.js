@@ -12,8 +12,15 @@ export async function GET(request) {
 			return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 		}
 
-		// Connect to MongoDB
-		await connectToDatabase();
+		// Try to connect to MongoDB, but don't fail if connection is not available
+		try {
+			await connectToDatabase();
+		} catch (error) {
+			console.warn(
+				"MongoDB connection failed, using fallback storage:",
+				error.message
+			);
+		}
 
 		// Get query parameters
 		const { searchParams } = new URL(request.url);

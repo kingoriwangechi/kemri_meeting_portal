@@ -1,9 +1,13 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI;
+// Default to using a local MongoDB for development if MONGODB_URI is not provided
+const MONGODB_URI =
+	process.env.MONGODB_URI || "mongodb://localhost:27017/kemri_meeting_portal";
 
-if (!MONGODB_URI) {
-	throw new Error("Please define the MONGODB_URI environment variable");
+// In production, we'll still warn but not throw an error to prevent deployment failures
+// We'll use JSON file storage as fallback (already implemented in the app)
+if (!process.env.MONGODB_URI && process.env.NODE_ENV === "production") {
+	console.warn("MongoDB URI not defined. Using JSON file storage as fallback.");
 }
 
 let cached = global.mongoose;

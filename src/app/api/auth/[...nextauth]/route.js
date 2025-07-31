@@ -11,16 +11,12 @@ console.log(
 	!!process.env.GOOGLE_SECRET
 );
 
-const handler = NextAuth({
-	debug: true, // Enable debug mode
-	useSecureCookies: process.env.NODE_ENV === "production",
-	cookies: {
-		callbackUrl: {
-			// This ensures that the callback URL cookie is accessible from client-side JavaScript
-			options: { sameSite: "lax", path: "/" },
-		},
-	},
-	providers: [
+// Create an array of providers based on available environment variables
+const providers = [];
+
+// Add Google provider if credentials are available
+if (process.env.GOOGLE_ID && process.env.GOOGLE_SECRET) {
+	providers.push(
 		GoogleProvider({
 			clientId: process.env.GOOGLE_ID,
 			clientSecret: process.env.GOOGLE_SECRET,
@@ -31,49 +27,73 @@ const handler = NextAuth({
 					response_type: "code",
 				},
 			},
-			// Remove any profile customization that might be causing issues
-			// Use the default profile handling by NextAuth
-		}),
+		})
+	);
+}
+
+// Add Azure AD provider if credentials are available
+if (
+	process.env.AZURE_AD_CLIENT_ID &&
+	process.env.AZURE_AD_CLIENT_SECRET &&
+	process.env.AZURE_AD_TENANT_ID
+) {
+	providers.push(
 		AzureADProvider({
 			clientId: process.env.AZURE_AD_CLIENT_ID,
 			clientSecret: process.env.AZURE_AD_CLIENT_SECRET,
 			tenantId: process.env.AZURE_AD_TENANT_ID,
 			authorization: { params: { scope: "openid profile email" } },
 			profile(profile) {
-				console.log("Microsoft profile:", profile); // Log the profile for debugging
+				console.log("Microsoft profile:", profile);
 				return {
 					id: profile.sub,
 					name: profile.name,
 					email: profile.preferred_username || profile.email,
-					image: null, // Microsoft doesn't provide an image by default
+					image: null,
 				};
 			},
-		}),
-		CredentialsProvider({
-			name: "Credentials",
-			credentials: {
-				email: { label: "Email", type: "email" },
-				password: { label: "Password", type: "password" },
-			},
-			async authorize(credentials) {
-				console.log("Credentials auth attempt for:", credentials.email);
+		})
+	);
+}
 
-				// This is a temporary authentication - replace with database check later
-				if (credentials.email && credentials.password) {
-					// For demo purposes, accept any non-empty email/password
-					const user = {
-						id: "1",
-						email: credentials.email,
-						name: credentials.email.split("@")[0],
-					};
-					console.log("Credentials auth successful for:", credentials.email);
-					return user;
-				}
-				console.log("Credentials auth failed for:", credentials.email);
-				return null;
-			},
-		}),
-	],
+// Always add Credentials provider as fallback
+providers.push(
+	CredentialsProvider({
+		name: "Credentials",
+		credentials: {
+			email: { label: "Email", type: "email" },
+			password: { label: "Password", type: "password" },
+		},
+		async authorize(credentials) {
+			console.log("Credentials auth attempt for:", credentials.email);
+
+			// This is a temporary authentication - replace with database check later
+			if (credentials.email && credentials.password) {
+				// For demo purposes, accept any non-empty email/password
+				const user = {
+					id: "1",
+					email: credentials.email,
+					name: credentials.email.split("@")[0],
+				};
+				console.log("Credentials auth successful for:", credentials.email);
+				return user;
+			}
+			console.log("Credentials auth failed for:", credentials.email);
+			return null;
+		},
+	})
+);
+
+const handler = NextAuth({
+	debug: true, // Enable debug mode
+	useSecureCookies: process.env.NODE_ENV === "production",
+	cookies: {
+		callbackUrl: {
+			// This ensures that the callback URL cookie is accessible from client-side JavaScript
+			options: { sameSite: "lax", path: "/" },
+		},
+	},
+	providers,
 	pages: {
 		signIn: "/auth/signin",
 		error: "/auth/error",
@@ -129,7 +149,6 @@ const handler = NextAuth({
 			return token;
 		},
 	},
-	debug: true,
 });
 
 export { handler as GET, handler as POST };

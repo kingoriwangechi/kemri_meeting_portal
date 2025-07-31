@@ -57,30 +57,21 @@ The Kenya Medical Research Institute (KEMRI) Meeting Portal is a web-based appli
 
 ### Environment Variables
 
-Create a `.env.local` file in the root directory with the following variables:
+See the [Environment Variables Documentation](docs/environment_variables.md) for a complete list of all required and optional environment variables.
+
+Basic example of `.env.local` file:
 
 ```
-# NextAuth
+# Required
 NEXTAUTH_URL=http://localhost:3000
 NEXTAUTH_SECRET=your-nextauth-secret
 
-# Google OAuth
+# Optional - Authentication Providers
 GOOGLE_ID=your-google-client-id
 GOOGLE_SECRET=your-google-client-secret
 
-# Microsoft OAuth - Required for future implementation
-AZURE_AD_CLIENT_ID=your-microsoft-client-id
-AZURE_AD_CLIENT_SECRET=your-microsoft-client-secret
-AZURE_AD_TENANT_ID=your-microsoft-tenant-id
-
-# Zoom API
-ZOOM_API_KEY=your-zoom-api-key
-ZOOM_API_SECRET=your-zoom-api-secret
-ZOOM_HOST_EMAIL=your-zoom-account-email
-
-# SendGrid
-SENDGRID_API_KEY=your-sendgrid-api-key
-EMAIL_FROM=your-sender-email
+# Optional - MongoDB (falls back to in-memory storage if not provided)
+MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/database
 ```
 
 ### Installation

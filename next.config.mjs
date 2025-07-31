@@ -12,6 +12,9 @@ const nextConfig = {
 	// Output standalone to optimize serverless deployment
 	output: "standalone",
 
+	// Enable React strict mode for better development experience
+	reactStrictMode: true,
+
 	// Security headers
 	async headers() {
 		return [

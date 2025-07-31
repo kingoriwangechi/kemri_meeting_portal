@@ -1,12 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	// Optimize output
-	output: "standalone",
-
-	// Configure experimental features
-	experimental: {},
-
-	// Configure image domains for external images (if needed)
+	// Configure image domains for external images
 	images: {
 		domains: [
 			"kemri.go.ke",
@@ -15,11 +9,8 @@ const nextConfig = {
 		],
 	},
 
-	// Increase dist cache size
-	distDir: process.env.NODE_ENV === "development" ? ".next" : "build",
-
-	// Allow the app to be deployed to any domain
-	assetPrefix: process.env.NEXT_PUBLIC_BASE_PATH || "",
+	// Output standalone to optimize serverless deployment
+	output: "standalone",
 
 	// Security headers
 	async headers() {

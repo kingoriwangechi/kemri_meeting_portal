@@ -99,5 +99,37 @@
     "createdAt": "2025-07-31T12:20:53.084Z",
     "status": "scheduled",
     "updatedAt": "2025-07-31T12:21:10.747Z"
+  },
+  {
+    "id": "bec548de-2f36-4a62-b2dd-5e660e050ac0",
+    "title": "t 1",
+    "description": "idk",
+    "dateTime": "2026-02-28T09:29:00",
+    "type": "internal",
+    "platform": "zoom",
+    "attendees": [],
+    "isRestrictive": false,
+    "meetingLink": "https://us05web.zoom.us/j/86214268751?pwd=7QnXmfO7IQPZXE8POVLN11No4qfcxW.1",
+    "zoomMeetingId": 86214268751,
+    "zoomInvitation": "Florence King'ori is inviting you to a scheduled Zoom meeting.\r\n\r\nTopic: t 1\r\nTime: Feb 28, 2026 09:29 AM Nairobi\r\nJoin Zoom Meeting\r\nhttps://us05web.zoom.us/j/86214268751?pwd=7QnXmfO7IQPZXE8POVLN11No4qfcxW.1\r\n\r\nMeeting ID: 862 1426 8751\r\nPasscode: HS2Zcp\r\n\r\n\r\n",
+    "organizer": "wangechi.kingori@students.jkuat.ac.ke",
+    "createdAt": "2026-02-27T18:29:47.368Z",
+    "status": "scheduled"
+  },
+  {
+    "id": "8365e97d-3bab-4bc5-bc93-6491238cb720",
+    "title": "lkjhg",
+    "description": "kjhghjk",
+    "dateTime": "2026-03-14T10:13:00",
+    "type": "internal",
+    "platform": "teams",
+    "attendees": [],
+    "isRestrictive": false,
+    "meetingLink": "https://teams.live.com/meet/9342936260135?p=7NYH550sQMv19WUH2J",
+    "zoomMeetingId": null,
+    "zoomInvitation": null,
+    "organizer": "wangechi.kingori@students.jkuat.ac.ke",
+    "createdAt": "2026-02-27T19:13:29.113Z",
+    "status": "scheduled"
   }
 ]

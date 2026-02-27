@@ -4,25 +4,31 @@ import { getToken } from "next-auth/jwt";
 export async function middleware(request) {
 	const { pathname } = request.nextUrl;
 
-	// Public paths that don't require authentication
-	const publicPaths = ["/", "/auth/signin", "/auth/error"];
-
-	// Allow public paths, static assets, API routes, and all auth-related paths
+	// Public paths that don't require authentication (fast path first)
 	if (
-		publicPaths.some((path) => pathname === path) ||
-		pathname.includes("/_next") ||
-		pathname.includes("/images") ||
-		pathname.includes("/api/") ||
-		pathname.startsWith("/auth/")
+		pathname === "/" ||
+		pathname.startsWith("/auth/") ||
+		pathname.startsWith("/api/auth/") ||
+		pathname.startsWith("/_next") ||
+		pathname.startsWith("/images") ||
+		pathname.startsWith("/favicon") ||
+		pathname === "/manifest.json"
 	) {
 		return NextResponse.next();
 	}
 
-	// Check for session token
-	const token = await getToken({ req: request });
+	// Check for session token for protected routes
+	try {
+		const token = await getToken({ req: request });
 
-	// Redirect to login if not authenticated
-	if (!token) {
+		// Redirect to login if not authenticated
+		if (!token) {
+			const url = new URL("/auth/signin", request.url);
+			url.searchParams.set("callbackUrl", encodeURI(request.url));
+			return NextResponse.redirect(url);
+		}
+	} catch (error) {
+		// If token check fails, redirect to signin
 		const url = new URL("/auth/signin", request.url);
 		url.searchParams.set("callbackUrl", encodeURI(request.url));
 		return NextResponse.redirect(url);

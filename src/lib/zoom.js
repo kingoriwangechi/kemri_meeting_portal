@@ -53,7 +53,7 @@ const generateZoomJWT = async () => {
 		);
 		if (error.response?.status === 401) {
 			throw new Error(
-				"Invalid Zoom credentials. Please check your API Key and Secret."
+				"Invalid Zoom credentials."
 			);
 		}
 		throw new Error(

@@ -111,8 +111,16 @@ export default function MeetingForm({
 			});
 
 			if (!response.ok) {
-				const error = await response.json();
-				throw new Error(error.error || "Failed to create meeting");
+				const errorData = await response.json();
+				// For Teams meetings, if auto-generation failed, allow manual entry
+				if (formData.platform === "teams" && !formData.meetingLink) {
+					setError(
+						errorData.error ||
+							"Teams meeting auto-generation failed. Please enter a Teams meeting link manually. See instructions below.",
+					);
+					return;
+				}
+				throw new Error(errorData.error || "Failed to create meeting");
 			}
 
 			const newMeeting = await response.json();
@@ -130,8 +138,8 @@ export default function MeetingForm({
 		setFormData((prev) => ({
 			...prev,
 			[name]: value,
-			// Clear meeting link when switching to Zoom
-			...(name === "platform" && value === "zoom" ? { meetingLink: "" } : {}),
+			// Clear meeting link when switching platforms
+			...(name === "platform" ? { meetingLink: "" } : {}),
 		}));
 	};
 
@@ -311,7 +319,7 @@ export default function MeetingForm({
 							placeholder={
 								isZoomPlatform
 									? "Will be generated automatically"
-									: "https://teams.microsoft.com/..."
+									: "Enter meeting link"
 							}
 							disabled={isZoomPlatform}
 							className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm disabled:bg-gray-100 disabled:text-gray-500 text-black"
@@ -372,8 +380,8 @@ export default function MeetingForm({
 									? "Updating..."
 									: "Creating..."
 								: initialMeeting
-								? "Update Meeting"
-								: "Create Meeting"}
+									? "Update Meeting"
+									: "Create Meeting"}
 						</button>
 					</div>
 				</form>

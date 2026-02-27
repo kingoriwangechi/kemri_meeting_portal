@@ -4,7 +4,6 @@ import { signIn } from "next-auth/react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import AuthDebugInfo from "@/components/AuthDebugInfo";
 
 export default function SignIn() {
 	const [isLogin, setIsLogin] = useState(true);
@@ -50,7 +49,7 @@ export default function SignIn() {
 			setError(
 				`Failed to authenticate with Google: ${
 					error.message || "Unknown error"
-				}`
+				}`,
 			);
 		}
 	};
@@ -69,7 +68,7 @@ export default function SignIn() {
 			setError(
 				`Failed to authenticate with Microsoft: ${
 					error.message || "Unknown error"
-				}`
+				}`,
 			);
 		}
 	};
@@ -223,9 +222,6 @@ export default function SignIn() {
 							Microsoft
 						</button>
 					</div>
-
-					{/* Debug information - remove in production */}
-					<AuthDebugInfo />
 				</div>
 			</div>
 		</div>
